@@ -1,4 +1,4 @@
-export PATH := /home/yuweihao/cuda-9.0/bin:$(PATH)
+export PATH := /home/saeid/cuda-9.0/bin:$(PATH)
 
 all: draw_rectangles box_intersections nms roi_align
 
