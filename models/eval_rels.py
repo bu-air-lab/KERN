@@ -1,4 +1,5 @@
-
+import sys
+sys.path.insert(0,"..")
 from dataloaders.visual_genome import VGDataLoader, VG
 import numpy as np
 import torch
