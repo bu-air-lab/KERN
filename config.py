@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 import numpy as np
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
-print ROOT_PATH
+print (ROOT_PATH)
 DATA_PATH = os.path.join(ROOT_PATH, 'data')
 
 def path(fn):
@@ -18,7 +18,7 @@ def stanford_path(fn):
 # =============================================================================
 # Update these with where your data is stored ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-VG_IMAGES = '/home/saeid/KERN/data/visual-genome/VGdata'
+VG_IMAGES = '/home/saeid/KERN/data/visual_genome/VGdata'
 RCNN_CHECKPOINT_FN = path('faster_rcnn_500k.h5')
 
 IM_DATA_FN = stanford_path('image_data.json')
@@ -113,7 +113,10 @@ class ModelConfig(object):
         self.__dict__.update(self.args)
 
         if len(self.ckpt) != 0:
+       
             self.ckpt = os.path.join(ROOT_PATH, self.ckpt)
+      
+
         else:
             self.ckpt = None
 
