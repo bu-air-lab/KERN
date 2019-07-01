@@ -59,61 +59,8 @@ ckpt = torch.load(conf.ckpt)
 print (val[0]['img'].view(-1,3,592,592).size())
 #print (val[0]['img_size'])
 
-'''
-transform = transforms.Compose(
-    [transforms.ToTensor(),
 
-
-
-transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
-#changed the num_worker to 0
-
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=1,
-                                          shuffle=True, num_workers=0)
-
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=1,
-                                         shuffle=False, num_workers=0)
-
-dataiter = iter(testloader)
-images, labels = dataiter.next()
-'''
-
-
-
-
-#dataiter = iter(val_loader)
-#images= dataiter.next()[0]
-#print (images[0].data.numpy()[0,:,:,:].shape)
-#imshow(images[0].data.numpy()[0,:,:,:])
-#print (dataiter.next()[0])
-#print (val_loader.dataset.size())
-#print (ckpt.keys())
-#model.load_state_dict(ckpt )
-#model.eval()
-#images = torch.from_numpy(numpy.array(images))
 optimistic_restore(detector, ckpt['state_dict'])
-#images = Variable(torch.from_numpy(numpy.array(images)))
-#print (images.size())
-print (val[0].keys())
-print (train[0].keys())
-#print (val[0]['gt_boxes'])
-#print (val[0]['gt_classes'])
-print (val[0]['index'])
-#detector(Variable(val[0]['img'].view(-1,3,592,592).cuda()),[val[0]['img_size']],0,gt_boxes=val[0]['gt_boxes'], gt_classes=val[0]['gt_classes']  , gt_rels=val[0]['gt_relations']  , train_anchor_inds=val[0]['index'])
 
 
-#if conf.mode == 'sgdet':
-#    det_ckpt = torch.load(conf.ckpt)['state_dict']
-#    detector.detector.bbox_fc.weight.data.copy_(det_ckpt['bbox_fc.weight'])
-#    detector.detector.bbox_fc.bias.data.copy_(det_ckpt['bbox_fc.bias'])
-#    detector.detector.score_fc.weight.data.copy_(det_ckpt['score_fc.weight'])
-#    detector.detector.score_fc.bias.data.copy_(det_ckpt['score_fc.bias'])
-
-
-
-
+detector(Variable(val[0]['img'].view(-1,3,592,592).cuda()),[val[0]['img_size']],0,gt_boxes=val[0]['gt_boxes'], gt_classes=val[0]['gt_classes']  , gt_rels=val[0]['gt_relations']  , train_anchor_inds=val[0]['index'])
