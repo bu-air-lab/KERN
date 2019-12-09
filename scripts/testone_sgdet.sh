@@ -13,4 +13,7 @@ python ../models/testone.py -m sgdet -p 100 -clip 5 -val_size 2  \
 -use_rel_knowledge \
 -rel_knowledge ../prior_matrices/rel_matrix.npy \
 -cache caches/kern_predcls.pkl \
--save_rel_recall results/kern_rel_recall_predcls.pkl
+-obj_knowledge ../prior_matrices/obj_matrix.npy \
+-use_ggnn_rel \
+-save_rel_recall results/kern_rel_recall_sgdet.pkl
+

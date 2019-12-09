@@ -112,6 +112,7 @@ class ModelConfig(object):
 
         self.__dict__.update(self.args)
 
+        print (self.rel_knowledge)
         if len(self.ckpt) != 0:
        
             self.ckpt = os.path.join(ROOT_PATH, self.ckpt)
