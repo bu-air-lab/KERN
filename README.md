@@ -20,7 +20,7 @@ In our paper, our model's strong baseline model is [SMN](https://arxiv.org/abs/1
 
 0. Install python3.6 and pytorch 3. I recommend the [Anaconda distribution](https://repo.continuum.io/archive/). To install PyTorch if you haven't already, use
  ```conda install pytorch=0.3.0 torchvision=0.2.0 cuda90 -c pytorch```.
- We use [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) to observe the results of validation dataset. If you want to use it in PyTorch, you should install TensorFlow and [tensorboardX](https://github.com/lanpa/tensorboardX) first. If you don't want to use TensorBaord, just not use the command ```-tb_log_dir```.
+ We use [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) to observe the results of validation dataset. If you want to use it in PyTorch, you should install TensorFlow and [tensorboardX](https://github.com/lanpa/tensorboardX) first. If you don't want to use TensorBaord, just not use the command ```-tb_log_dir```. Also install the dependencies through ```sh ~/KERN/dependencies.sh```.
  
 1. Update the config file with the dataset paths. Specifically:
     - Visual Genome (the VG_100K folder, image_data.json, VG-SGG.h5, and VG-SGG-dicts.json). See data/stanford_filtered/README.md for the steps to download these.
