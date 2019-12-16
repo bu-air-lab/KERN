@@ -60,15 +60,13 @@ detector = KERN(classes=test.ind_to_classes, rel_classes=test.ind_to_predicates,
 detector.cuda()
 ckpt = torch.load(conf.ckpt)
 
-
+'''
 #print (val)
 print (val[0]['img'].view(-1,3,592,592).size())
 #print (val[0]['img_size'])
 
-'''
-transform = transforms.Compose(
-    [transforms.ToTensor(),
 
+<<<<<<< HEAD
 
 
 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -124,7 +122,7 @@ for val_b, batch in enumerate(tqdm(val_loader)):
         images= dataiter.next()[0]
 #print (images[0].data.numpy()[0,:,:,:].shape)
         imshow(images[0].data.numpy()[0,:,:,:],str(val_b))
-'''
+
 #print (dataiter.next()[0])
 #print (val_loader.dataset.size())
 #print (ckpt.keys())
@@ -155,7 +153,7 @@ print (np.asarray(val[0]['img_size']))
 
 #print ('testing on valloader: ')
 #print (detector[batch])
-
+'''
 
 
 all_inputs = os.listdir('/home/saeid/KERN/data/input_images')
@@ -212,6 +210,11 @@ print (val[0]['index'])
 #    detector.detector.score_fc.weight.data.copy_(det_ckpt['score_fc.weight'])
 #    detector.detector.score_fc.bias.data.copy_(det_ckpt['score_fc.bias'])
 
+'''
+=======
+optimistic_restore(detector, ckpt['state_dict'])
+>>>>>>> 3b478efa3e336716c7bb78aa5a180e1d02c72290
 
 
-
+detector(Variable(val[0]['img'].view(-1,3,592,592).cuda()),[val[0]['img_size']],0,gt_boxes=val[0]['gt_boxes'], gt_classes=val[0]['gt_classes']  , gt_rels=val[0]['gt_relations']  , train_anchor_inds=val[0]['index'])
+'''
