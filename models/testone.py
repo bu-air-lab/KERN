@@ -5,6 +5,7 @@ sys.path.insert(0,"../data/input_images")
 from config import ModelConfig
 from dataloaders.visual_genome import VGDataLoader, VG
 import numpy as np
+import pandas as pd
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -24,6 +25,7 @@ from dataloaders.input import custom
 from dataloaders.image_transforms import SquarePad, Grayscale, Brightness, Sharpness, Contrast, \
     RandomOrder, Hue, random_crop
 import os
+import json
 
 def imshow(img,filename):
     img = img / 2 + 0.5     # unnormalize
@@ -159,7 +161,8 @@ print (np.asarray(val[0]['img_size']))
 all_inputs = os.listdir('/home/saeid/KERN/data/input_images')
 result_path= "/home/saeid/KERN/results/"
 input_path= "/home/saeid/KERN/data/input_images/"
-
+with open('../data/stanford_filtered/VG-SGG-dicts.json', 'rt') as f:
+    input_data = json.load(f)
 for image in all_inputs:
 
 	output = detector(custom(input_path+image)[0].cuda(),custom(input_path+image)[1],0,gt_boxes=np.zeros([1,4]), gt_classes=np.zeros([1,3])  , gt_rels=np.zeros([1,3]) , train_anchor_inds=0)
@@ -173,24 +176,63 @@ for image in all_inputs:
 	print (boxes_i)
 	print ('boxes_i.shape')
 	print (boxes_i.shape)
-	np.savetxt(result_path+image.split('.')[0]+"_boxes.csv",boxes_i,delimiter=",")
+	df_boxes = pd.DataFrame(data=boxes_i,index=None,columns=None) 
+	#np.savetxt(result_path+image.split('.')[0]+"_boxes.csv",boxes_i,delimiter=",")
 	print (boxes_i.shape)
 	print ('objs_i')
 	print (objs_i)
-	np.savetxt(result_path+image.split('.')[0]+"_objs.csv",objs_i,delimiter=",")
+	df_objs = pd.DataFrame(data=objs_i,index=None,columns=None) 
+	#np.savetxt(result_path+image.split('.')[0]+"_objs.csv",objs_i,delimiter=",")
 	print (len(objs_i))
 	print ('obj_scores_i')
 	print (obj_scores_i)
 	print (len(obj_scores_i))
 	print ('rels_i')
 	print (type(rels_i))
-	np.savetxt(result_path+image.split('.')[0]+"_rels.csv",rels_i,delimiter=",")
+	df_rels = pd.DataFrame(data=rels_i,index=None,columns=None) 
+	#np.savetxt(result_path+image.split('.')[0]+"_rels.csv",rels_i,delimiter=",")
 	print (rels_i)
 	print (rels_i.shape)
 	print ('pred_scores_i')
 	print (pred_scores_i)
-	np.savetxt(result_path+image.split('.')[0]+"_pred_scores.csv",pred_scores_i,delimiter=",")
+	df_scores = pd.DataFrame(data=pred_scores_i,index=None,columns=None) 
+
+	#np.savetxt(result_path+image.split('.')[0]+"_pred_scores.csv",pred_scores_i,delimiter=",")
 	print (pred_scores_i.shape)
+
+	extracted_df_scores = df_scores.iloc[:,1:]
+
+
+	detected_objects =[]
+	detected_relations = []
+
+	rels_output_df= pd.DataFrame(columns = ['obj1', 'predicate','obj2','prob','obj1_1','obj1_2','obj1_3','obj1_4'\
+                                                ,'obj2_1','obj2_2','obj2_3','obj2_4'])
+
+
+	for i in range(df_objs.shape[0]):
+		detected_objects.append(input_data['idx_to_label'][str(df_objs.iloc[i,0])])
+
+	for i in range(df_rels.shape[0]):
+		if df_scores.iloc[i,0] >0.9:
+			pass
+		else:
+
+			rel_id = extracted_df_scores.iloc[i,:].idxmax()
+			print (rel_id)
+			rels_output_df.loc[len(rels_output_df)] = [ input_data['idx_to_label']\
+                        [str(df_objs.iloc[df_rels.iloc[i,0],0])], input_data['idx_to_predicate'][str(rel_id)],\
+			input_data['idx_to_label'][str(df_objs.iloc[df_rels.iloc[i,1],0])]\
+                        ,extracted_df_scores.iloc[i,rel_id-1],df_boxes.iloc[df_rels.iloc[i,0],0],\
+                        df_boxes.iloc[df_rels.iloc[i,0],1], df_boxes.iloc[df_rels.iloc[i,0],2],\
+                        df_boxes.iloc[df_rels.iloc[i,0],3], df_boxes.iloc[df_rels.iloc[i,1],0],\
+                        df_boxes.iloc[df_rels.iloc[i,1],1], df_boxes.iloc[df_rels.iloc[i,1],2],\
+                        df_boxes.iloc[df_rels.iloc[i,1],3]]
+	
+	rels_output_df[~rels_output_df.obj2.str.contains("building","room")].to_csv('../results/final_outputs_'+image+'.csv', sep='\t', encoding='utf-8')	
+	
+
+print ('Done')
 
 	#input()
 
