@@ -21,7 +21,11 @@ def apply_nms(scores, boxes,  pre_nms_topn=12000, post_nms_topn=2000, boxes_per_
     for bpi in boxes_per_im:
         e = s + int(bpi)
         keep_im = _nms_single_im(scores[s:e], boxes[s:e], pre_nms_topn, post_nms_topn, nms_thresh)
-        keep.append(keep_im + s)
+
+        try:
+            keep.append(keep_im + s)
+        except BaseException:
+            keep.append(keep_im + s)
         im_per.append(keep_im.size(0))
 
         s = e

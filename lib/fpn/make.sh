@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#
+/usr/bin/env bash
 
 cd anchors
 python setup.py build_ext --inplace
